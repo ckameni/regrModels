@@ -1,0 +1,180 @@
+---
+title: "Aufgabe 1.3.1"
+author: "Kameni"
+date: "Wednesday, November 12, 2014"
+output: html_document
+---
+#Aufgabe 1.3.1
+
+```{r,eval=F}
+|Fläche|Preis|
+|51    |11.97|
+|61    |11.60|
+|71    |11.21|
+|81    |11.15|
+|91    |10.99|
+|101   |10.73|
+|111   |10.64|
+|121   |10.51|                                         
+```
+
+
+
+```{r}
+x<-c(51 ,61 ,71 ,81 ,91 ,101 ,111,121) # fläche
+y<-c(11.97,11.60,11.21,11.15,10.99,10.73,10.64,10.51) # preis
+
+
+```
+
+a) Emitteln Sie den empirischen Korrelationskoeffizienten und interpretieren Sie ihn.
+```{r}
+
+
+cor<-cor(x,y)
+
+```
+
+Der  Korrelationskoeffizient beträg `r cor` und suggeriert einen negativen Zusammenhang zwischen  Größe der Wohnfläche und Höhe des Preises. Der Preis  sinkt demnach,wenn sich der Wohnfläche vergrößert.
+
+
+b) Bestimmen Sie die Regressionsgerade zum Quadratmeterpreis in Abhängigkeit von der Wohnfläche.
+```{r}
+regrGerade<-lm(y~x)
+plot(x,y)
+abline(regrGerade)
+
+
+intercept<-coef(regrGerade)[1]
+slope<-coef(regrGerade)[2]
+
+```
+
+Die regressionsgerade lautet: y = `r intercept` `r slope`* x
+
+
+c) Wie groß ist bei dieser Regression das Bestimmtheitsmaß? Was bedeutet dieser Wert?
+
+```{r}
+R_sqared<-cor(x,y)^2
+```
+
+das Bestimmtheitsmaß weist den Wert: `r R_sqared` auf. Das Bestimmtheitsmaß besagt, dass  95 % der Varianz der y-Werte allein durch die Gerade erzeugt werden
+
+
+d) Welche Monatsnettomiete wäre gemäß b) für eine 65 m' große Wohnung zu zahlen?
+
+```{r}
+y_dach<-intercept + slope * 65
+miete<-y_dach*65
+```
+
+Für eine 65 m' große Wohnung wäre preis pro quadrat meter `r y_dach` und die Miete `r miete`.
+
+
+
+#Aufgabe 1.3.2
+
+```{r}
+besucher<-c(340,150,250,300,240,220) #Besuecheranzahl
+temp<-c(35,25,28,32,26,28) #Höchsttemperatur In Grad celcius
+
+```
+
+a) Berechnen Sie ein geeignetes Zusammenhangsmaß zwischen der Besucheranzahl und
+der Höchsttemperatur.
+
+```{r}
+cor<-cor(besucher,temp)
+```
+Der Korrelationkoeffizient beträgt **`r cor`**
+
+b) Berechnen Sie die Regressionskoeffizienten der linearen Regression, wenn die Höchsttemperatur
+als einzige Einflussgröße für die Besucheranzahl erachtet wird.
+```{r}
+regrGerade1<-lm(besucher~temp)
+beta1<-cor(temp,besucher)*sd(besucher)/sd(temp);beta1
+beta0<-mean(besucher)-beta1*mean(temp);beta0
+
+```
+beta1 beträgt **`r beta1`** und beta0 **`r beta0`**
+
+e) Mit welcher Besucheranzahl ist bei einer Höchsttemperatur von 30 Grad Celsius zu
+rechnen?
+```{r}
+y_dach=beta0 +beta1*30
+ 
+```
+bei einer Höchsttemperatur von 30 Grad Celcius ist mit *`r y_dach`* Besuchern zu rechen.
+
+
+
+#Aufgabe 1.3.3
+
+```{r}
+besch<-c(0.4,0.5,0.8,1.0,1.3,1.4,2.2,2.6,3.3) # Beschäftigte
+umsatz<-c(80,150,120,190,280,240,300,470,600) # Umsatz
+```
+
+
+
+a) Stellen Sie die Beobachtungswerte in einem Streudiagramm grafisch dar.
+```{r}
+
+plot(besch,umsatz)
+regrline2<-lm(umsatz~besch)
+abline(regrline2, lwd=3, col='red')
+abline(h = -1:5, v = -1:3, col = "lightgray", lty = 3)
+```
+
+b) Berechnen Sie den Korrelationskoeffizienten von Bravais-Pearson und nach der Methode
+der kleinsten Quadrate die Regressionsgerade. Zeichnen Sie die Regressionsgerade
+in das Streudiagrarrun ein.
+```{r}
+corr<-cor(besch,umsatz)
+beta1<-cor(besch,umsatz)*sd(umsatz)/sd(besch);beta1
+beta0<-mean(umsatz)-beta1*mean(besch);beta0
+```
+
+c) Welchen Anteil hat diese Gerade an der Varianz des Umsatzes?
+```{r}
+R_squared<-cor(besch,umsatz)^2;R_squared*100
+
+```
+
+
+**`r R_squared`**
+d) Welchen Jahresumsatz karm man bei einem Unternehmen dieser Branche mit zweitausend
+Beschäftigten erwarten?
+```{r}
+y_dach= beta0 + beta1*2000;y_dach
+```
+
+
+#Aufgabe 1. 3.4
+
+a) Berechnen Sie nach der Methode der kleinsten Quadrate die optimale Regressionsgerade.
+```{r}
+
+cor<-0.8945;x_bar<-41.0;sx<-16.6
+y_bar<-145.1;sy<-20.42     
+b_dach<-cor*sy/sd(x)
+a_dach<-y_bar-b_dach*x_bar
+a_dach
+b_dach
+```
+
+  beta0 =  `r a_dach` , beta1 = `r b_dach`
+  
+  b) Welchen Blutdruck kann man gemäß a) bei einer 50-jährigen Frau erwarten?
+  
+```{r}
+y_dach= a_dach + b_dach *50;y_dach
+```
+
+c) Berechnen Sie das Bestimmtheitsmaß der linearen Regression und interpretieren Sie
+seinen Wert.
+```{r}
+R_squared<-cor()
+```
+

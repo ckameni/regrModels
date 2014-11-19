@@ -1,0 +1,96 @@
+---
+title: "Residual Variation"
+author: "Kameni"
+date: "Wednesday, November 12, 2014"
+output: html_document
+---
+
+ It can also be shown that, given a model, the maximum likelihood estimate of the variance of the random error is the average squared residual. However, since our linear model with one predictor requires  two parameters we have only (n-2) degrees of freedom.
+
+
+###
+
+First regenerate the regression line and call it fit
+```{r}
+fit<-lm(child~parent, galton)
+```
+
+
+we want to estimate the sd(sigma) of the error
+```{r }
+sqrt(sum(fit$residuals^2)/(n-2))
+summary(fit)$sigma # alternaively
+sqrt(deviance(fit)/(n-2)) # alternatively
+
+```
+
+# total variation
+
+#### some defintions:
+the total variation is represented by:
+
+```{r}
+y-mean(y)
+```
+
+
+the residual variation is represented by:
+```{r}
+y-y_hat
+```
+
+
+#### introducing R^2
+R^2: percent of total variation described by the model.In other words:the variation of the regression.
+
+
+```{r}
+
+   ## first calculate the mean of the predictor
+      mu<-mean(galton$child)
+
+```
+
+remember that centering data  means subtracting the mean from each data point. that's what we are doing in order to calculate the  total variation of the data.
+
+
+```{r}
+   ## calculate the total variation of the data
+      sTot<-sum((galton$child-mu)^2)
+
+```
+
+we now want to create a variable called sRes, where we'll be stocking the residual variation.
+
+```{r}
+sRes<-deviance(fit)  #sqrt(sum(e^2)/(n-2))
+
+```
+
+Finally, the ratio sRes/sTot represents the percent of total variation contributed by the residuals.
+```{r}
+sRes/sTot
+```
+
+To find the percent contributed by the model, i.e., the regression variation, subtract the fraction sRes/sTot from 1.  This is the value R^2.
+```{r}
+1-sRes/sTot
+```
+
+
+alternatively
+```{r}
+summary(fit)$r.squared
+```
+
+
+we now want to compute the square of the correlation of the
+the children and parent and then see what happens.
+we know that this will provide the same result as R^2
+```{r}
+cor(galton$child,galton$parent)^2
+```
+
+
+## conclusion
+What can we say about R^2? It's the percentage of variation explained by te regression model. It also equals the sample correlation squared.

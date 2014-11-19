@@ -1,0 +1,78 @@
+---
+title: "predictionInteval"
+author: "Kameni"
+date: "Saturday, November 15, 2014"
+output: word_document
+---
+# sypnopsis
+
+<http://nte-serveur.univ-lyon1.fr/immediato/Math/Enseignement/07%20Statistiques/06.%20Ligne%20de%20r%E9gression%20et%20corr%E9lation/Exercice_6_3.html>
+
+#Exercice 3. Influence de la température sur le rendement d'une réaction.
+Une série d'expériences dans une unité pilote en vue d'étudier l'influence de la température X sur le rendement d'une réaction chimique Y à pression constante a donné les résultats suivants :
+
+```{r}
+ X <-c(51,52,54,56,57,58,59)
+ Y <-c(21,18,15,12,8,6,4)
+n=length(X)
+```
+1) Estimer, par la méthode des moindres carrés ordinaires, la droite
+E X (Y) = A + B X.
+
+```{r}
+fit<-lm(Y~X)
+beta0<-coef(fit)[1];beta1<-coef(fit)[2]
+
+y_dach=beta0 + beta1 * X
+```
+
+** E X (Y) = `r beta0` `r beta1` * X **
+
+2) Estimer la variance résiduelle.
+```{r}
+e<-Y-beta0-beta1*X;e
+sigma<-sqrt(sum(e^2)/(n-2))
+variance<-sigma^2
+```
+
+`r variance`
+
+3) Calculer les intervalles de confiance de beta0 et beta1 pour alpha = 5 %.
+```{r}
+sumCoef<-summary(fit)$coefficients
+# intervalle pour beta0
+sumCoef[1,1]+c(-1,1)*qt(.975,df=fit$df)*sumCoef[1,2]
+#intervalle pour beta1
+sumCoef[2,1]+c(-1,1)*qt(.975,df=fit$df)*sumCoef[2,2]
+```
+
+5) Faire une estimation ponctuelle et par intervalle de confiance (a = 5 %) de la valeur moyenne de Y lorsque X = 55 °C.
+
+```{r}
+
+R_squared<-cor(X,Y)^2;R_squared
+I<-55 + c(-1,1)*qt(.975,df=fit$df)*R_squared
+
+I
+mean(I)
+```
+
+6°) Déterminer l'intervalle de prédiction à 95 % pour une mesure du rendement correspondant à une température de 55 °C.
+
+```{r}
+x1<-55
+y_dach=sumCoef[1,1] + sumCoef[2,1] * x1;y_dach
+
+```
+
+```{r}
+x1<-55
+y_dach=sumCoef[1,1] + sumCoef[2,1] * x1;y_dach
+t<-qt(.975,df=fit$df);t
+
+y_dach+c(-1,1)*t*sigma*sqrt((1/n)+((x1-mean(X))^2)/((n-1)* var(X)))
+y_dach+c(-1,1)*t*sigma*sqrt(1+(1/n)+((x1-mean(X))^2)/((n-1)* var(X)))
+12.59278+c(-1,1)*2.570582* 0.8251835*sqrt((1/7)+ ((55-55.28571)^2)/ (6*9.238095))
+                                          
+      ```
+

@@ -1,0 +1,418 @@
+---
+title: "signifikanztest_aufgaben"
+author: "Kameni"
+date: "Thursday, November 13, 2014"
+output: pdf_document
+---
+
+
+1.Imagine a researcher wants to determine whether or not a given drug has any effect on the scores of human subjects performing a task of ESP sensitivity. He randomly assigns his subjects to one of two groups. Nine hundred subjects in group 1 (the experimental group) receive an oral administration of the drug prior to testing. In contrast, 1000 subjects in group 2 (control group) receive a placebo
+
+```{r}
+#drug group
+ µ1= 9.78; simga1 = 4.05; n1 = 900
+#no-drug group
+ µ2= 15.10;sigma2 = 4.28; n2= 1000
+```
+
+
+2.      What is our research hypothesis?
+Taking this drug changes performance on a task of ESP sensitivity.
+
+3.      Now we need to translate the research hypothesis into a testable statistical hypothesis
+
+**(H0):** µ1- µ2 = 0
+
+**(H1):** µ1 - µ2 != 0
+
+The null hypothesis (H0) states that there is no difference between the population means of the drug group and no-drug group ont the test of ESP sensitivity.
+This means that the two populations are identical in ESP sensitivity after administration of the drug. 
+
+The alternative hypothesis (H1): There is a difference between the population means of the drug group and no-drug group on the test of ESP sensitivity
+
+```{r}
+# drug group
+ µ1 =9.78; sigma1 = 4.05; n1 = 900
+#no-drug group
+ µ2= 15.10;sigma2 = 4.28; n2= 1000
+```
+
+
+
+### From the SD of each sample, calculate the SE for the sum
+1.SE for the sum of group 1 = square root (sample size of group 1) * SD of group 1
+2.SE for the sum of group 2 = square root (sample size of group 1) * SD of group 1
+
+
+```{r}
+
+SE1<-sqrt(n1)*sigma1;SE1
+SE2<-sqrt(n2)*sigma2;SE2
+```
+
+### Then calculate the SE for the average
+1. SE for the average of group 1 = SE for the sum/sample size of group 1
+2. SE for the average of group 2 = SE for the sum/sample size of group 2
+
+
+```{r}
+SE_avr1<-SE1/n1;SE_avr1
+SE_avr2<-SE2/n2;SE_avr2
+```
+
+
+### Then square each of these, sum them, and take the square root
+
+
+```{r}
+SE_diff = sqrt(SE_avr1^2 + SE_avr2^2);SE_diff
+```
+
+
+### z
+```{r}
+z<- -5.32/SE_diff;z
+
+
+# wo hat er denn die -5.32 her????
+```
+
+6. The P associated with a difference this strong or stronger is extremely rare, so we REJECT the plausibility of our null hypothesis.
+7.We therefore accept the alternative, and conclude that in fact there is a difference between the two groups. But wait a minute, the group that got the drug did worse than the control group. We know this from the negative sign of the difference between the two means. It appears the drug hampers ESP ability. Remember that even when we reject the null hypothesis, we have to be cognizant of the sign of the Z-test or the original means of the two groups, to make a conclusion about the direction of the difference.
+
+
+
+
+#Aufgabe 3.2.1
+In einer Kelterei werden 1-Liter-Flaschen abgefüllt. Es ist bekannt, dass die Füllmenge X
+mit der Standardabweichung simga= 5 cm' schwankt und dabei in guter Näherung normalverteilt
+ist. Um den mittleren Füllstand zu schätzen, sind n= 91 Flaschen zufällig ausgewählt,
+kontrolliert und daraus der empirische Kennwert x_bar=1003,03 cm' berechnet worden.
+
+a) Bestimmen Sie ein Konfidenzintervall der Ordnung 0,95 für die mittlere Füllmenge 1'.
+Was bedeutet dieses Intervall?
+```{r}
+sigma<-5
+n<-91
+x_bar<-1003.03
+(1-0.5)/2
+#das Quantil der Normalverteilung hier z_1_minus_alpha_durch_2 = Z_O_punkt_975 
+z_1_minus_alpha_durch_2<-qnorm(0.975)
+
+Interval<-x_bar+c(-1,1)*(sigma/sqrt(n))*z_1_minus_alpha_durch_2;Interval
+
+unterG<-x_bar-(sigma/sqrt(n))*z_1_minus_alpha_durch_2
+oberG<-x_bar+(sigma/sqrt(n))*z_1_minus_alpha_durch_2
+
+```
+
+Die mittlere Füllmenge liegt mit 95%iger Wahrscheinlichkeit zwischen `r unterG` und
+`r oberG` cm'.
+
+b) Angenommen, der empirische Kennwert x = 1003,03 wären aus n = 364 Beobachtungen gewonnen worden. Wie genau würde sich die Länge des Konfidenzintervalls verändern?
+
+
+364/91=4  das heißt,  die länge des konfidenzintervalls würde sich halbieren
+wir können aber das Konvidenzniveau berechnen
+```{r}
+n1 = 364
+Interval1<-x_bar+c(-1,1)*(sigma/sqrt(n1))*z_1_minus_alpha_durch_2;Interval1
+ # Interval1<-(go - gu)/4 *c(1,-1)+ c(gu, go)
+```
+
+
+c) Weil Zweifel an der Angabe sigma= 5 aufgekommen sind, wurde aus derselben Stichprobe vom Umfang 91 auch noch die empirische Standardabweichung s = 5,52 bestimmt. Geben Sie ein 90%-Vertrauensintervall für die Standardabweichung der Füllmenge an. Werden die Zweifel an der Streuungsangabe damit gestützt?
+
+```{r}
+ s = 5.52
+
+chi_qdrt1<-qchisq(0.95,90)
+chi_qdrt2<-qchisq(0.05,90)
+
+sqrt(((n-1)*s^2)/c(chi_qdrt1,chi_qdrt2))
+
+```
+
+
+#Aufgabe 3.2.2
+
+Es sei eine normalverteilte Grundgesamtheit gegeben, aus der eine einfache Stichprobe vom Umfang 25 gezogen wird. Mit 1-a=0,95 ergibt sich das symmetrische Konfidenzintervall (gu;go) für den unbekannten Erwartungswert mit (gu;go)=(46.872;55.128)
+
+```{r}
+x_bar<-51;n<-25;alpha<-0.05
+
+gu<-46.872;go<-55.128
+
+```
+
+a) Welches Stichprobenmittel hat die Stichprobe?
+```{r}
+(go-x_bar)
+(x_bar-gu)
+
+#Wegen der Symmetrie des Konfidenzbereichs liegt das arithmetische Mittel genau 
+#inder Mitte des gegebenen Intervalls. Das bedeutet x = 51 .
+```
+
+b) Die Standardabweichung sei bei Ziehung der Stichprobe unbekannt. Wie groß ist die
+Stichprobenvarianz?
+```{r}
+t<-qt(.975,n-1);t
+#x_bar + c(-1,1)*(s/sqrt(n))*t=c(gu,go)
+
+s=((go - x_bar)/t)*sqrt(n) #;s=+/- 10
+
+var<-s^2;var
+
+```
+
+**Rechensweg**
+x_bar-(s/sqrt(n))*t=go oder  x_bar+(s/sqrt(n))*t=gu
+x_bar+(s/sqrt(n))*t=gu
+(s/sqrt(n))*t=gu-x_bar
+s/sqrt(n)=(gu-x_bar)/t
+s=((gu-x_bar)/t)*sqrt(n);s
+
+
+c) Die Standardabweichung sei bei Ziehung der Stichprobe bekannt. Wie groß ist die Varianz?
+
+Die Formel zur Berechnung des Konfidenzintervalls lautet jetzt, da sigma^2 bekarmt ist  x_bar + c(-1,1)(sigma/sqrt(n))z = c(gu,go)
+```{r}
+
+#dabei wird das Quantil der Normalverteilung verwendet
+z<-qnorm(.975);z
+
+
+sigma=((gu-x_bar)/z)*sqrt(n);sigma
+var1<-sigma^2;var1
+
+```
+
+**Rechensweg*
+Der entscheidende Unterschied ist , dass hier mit dem Quantil der Normaveteilung
+gerechnet wurde.
+
+x_bar-(sigma/sqrt(n))*z=go  oder  x_bar+(sigma/sqrt(n))*z=gu
+x_bar+(sigma/sqrt(n))*z=gu
+(sigma/sqrt(n))*z=gu-x_bar
+sigma/sqrt(n)=(gu-x_bar)/z
+sigma=((gu-x_bar)/z)*sqrt(n)
+
+#Aufgabe 3.2.3
+```{r}
+x<-c(21.3,22.5,20.6,21.4,22.0,23.9,25.4,24.1,22.1,23.0,22.9,21.0,21.8,22.5,22.2,19.7)
+sigma <- sd(x);sigma
+x_bar <- mean(x)
+n<-length(x)
+
+#Bestimmen Sie ein 95%-Konfidenzintervall für die Varianz des Stammdurchmessers.
+chi_qdrt1<-qchisq(.975,df=(n-1));chi_qdrt1
+chi_qdrt2<-qchisq(.025,df=(n-1));chi_qdrt2
+
+((n-1)*sigma^2)/c(chi_qdrt1,chi_qdrt2) # 
+
+
+```
+      
+ Die function sqrt() wird hier  nicht verwendet, da es sich um  die Ermittlung des Konfidenzniveaus der ** varianz ** handelt.
+ 
+ 
+ Mit 95-prozentiger Sicherheit liegt der wahre Wert für die Varianz des Stammdurchmessers in den Grenzen von 1,086 und 4,771 cm'.
+
+#Aufgabe 3.2.5
+Aus früheren Untersuchungen ist bekannt, dass das verfügbare Monatseinkommen von Studierenden annähernd normalverteilt ist mit einer Standardabweichung von sigma = 85 euro. Aus einer Zufallsstichprobe vom Umfang n = 289 aus den rund 30000 Studierenden einer großen Universität errechnet sich ein durchschnittliches verfügbares Monatseinkommen von x=510 euro.
+
+a) Bestimmen Sie ein 95%-Konfidenzintervall für das Durchschnittseinkommen aller Studierenden.
+
+```{r}
+n_pop<-30000
+n_samp = 289
+sigma<-85
+x_bar<-510
+z<-qnorm(.975)
+
+Interval1<-x_bar+c(-1,1)*(sigma/sqrt(n_samp))*z;Interval1
+
+#500.2002    519.7998
+```   
+b) Interpretieren Sie dieses Intervall.
+
+Mit 95%  Sicherheit liegt der wahre Mittelwert zwischen *500.2002*   und  *519.7998*.
+
+
+#Aufgabe 3.2.6
+Ein Verlag führt eine Leseranalyse unter den Beziehern seiner Zeitschrift "Neue Medientechnik"durch. Eine einfache Zufallsstichprobe ergab unter anderem, dass 75 Prozent der befragten Leser mit dieser Zeitschrift zufrieden sind. Daraus wurde (ohne Stetigkeitskorrektur) das symmetrische 95-Prozent-Konfidenzintervall (0,61; 0,89) für  den Anteil der zufriedenen Leser berechnet.
+
+a) Was bedeutet das angegebene Intervall?
+```{r}
+#Mit 95% Sicherheit liegt der wahre Wert der zufriedenen Leser zwischen gu<-0.61 und go<-0.89
+#anders gesagt:
+#Mit einer Wahrscheinlichkeit voo 95 % überdeckt das Intervall (0,61; 0,89) den wahren Wert für den Anteil zufriedener Leser.
+
+```
+
+b) Eine Wiederholung der Umfrage mit dem vierfachen Stichprobenumfang brachte wieder einen Anteilswert von 0,75. Wie lautet das 95-Prozent-Konfidenzintervall jetzt?
+```{r}
+gu<-0.61; go<-0.89
+Intervall3<-(go - gu)/4 *c(1,-1)+ c(gu, go);Intervall3
+```
+
+
+#Aufgabe 3.2.7
+Ein Paketdienst-Untemehmen liefert die Pakete mit Kleintransportern aus. Im Fuhrpark befinden sich 360 Fahrzeuge, alle vom selben Typ. Eine Stichprobe vom Umfang n = 31 sollte Auskunft über den Kraftstoffverbrauch (Diesel) der eingesetzten Fahrzeuge geben. Aus den 31 Beobachtungswerten wurden das arithmetische Mittel x = 7,42 (in 1/100 km) und die Stichprobenstandardabweichung s = 0,82 berechnet.
+
+```{r}
+npop<-360;n_samp<-31;x_bar<-7.42;s = 0.82
+```
+
+a) Bestimmen Sie das Konfidenzintervall zum Niveau 1 - a = 0,9 für die Standardabweichung des Dieselverbrauchs, der als nonnalverteilt angesehen werden kann.
+
+```{r}
+chi_qdrt1<-qchisq(0.95,df=n_samp-1)
+chi_qdrt2<-qchisq(0.05,df=n_samp-1)
+
+gu<-sqrt(((n_samp-1)*s^2)/chi_qdrt1);gu
+go<-sqrt(((n_samp-1)*s^2)/chi_qdrt2);go
+```
+
+b) Interpretieren Sie das Ergebnis aus a).
+
+Mit einer 90% Sicherheit überdeckt das Intervall `r gu` - `r go` die Standardabweichung des Dieselverbrauchs.
+
+#Aufgabe 3.2.8
+Die Höhe des Strafmaßes bei Kapitalverbrechen wird in jüngster Zeit oft kritisiert. Im Auftrag des Bundesjustizministeriums wurden deshalb 2000 Strafrechtsexperten in Deutschland befragt, welche Note (Schulnotensystem 1 = sehr gut, ... , 6 = ungenügend) sie dem geltenden Strafrecht bescheinigen und ob sie eine Strafrechtsreform für notwendig halten. Die Befragungsteilnehmer wurden nach dem uneingeschränkten Zufallsprinzip aus der Menge aller Strafrechtsexperten in Deutschland ausgewählt. Die erhobenen Daten sind in folgender Tabelle zusammengefasst:
+
+```{r}
+n<-2000
+Note<-c(1, 2, 3 ,4, 5, 6) #Summe
+#Reform
+Ja   <-c(0, 50, 300, 850, 200 ,100);sja<-sum(Ja)
+nein <-c(50,100,200, 150, 0 ,   0 );snein<-sum(nein)
+Summe<-c(50,150,500, 1000,200, 100);ssum<-sum(Summe) 
+```
+
+a) Ermitteln Sie für die Grundgesamtheit aller Strafrechtsexperten in Deutschland ein Konfidenzintervall zum Konfidenzniveau 1-a = 0,95 für den Erwartungswert der erteilten Note. Betrachten Sie die Schulnoten dabei als kardinal skaliertes Merkmal.
+
+```{r}
+z<-qnorm(.975)
+x_bar<-sum(Note* Summe)/n;x_bar   #3.725
+s<- sqrt((sum((Note^2)*Summe)-n*x_bar^2)/(n-1));s  #1
+intervall<-x_bar+ c(-1,1)*(s/sqrt(n))*z
+
+```
+
+**`r intervall `**
+
+b) Es wird der Parameter "Anteil der Strafrechtsexperten. die eine Reform des Strafrechts für notwendig halten" betrachtet.
+
+(1) Ermitteln Sie für diesen Parameter ein Konfidenzintervall (ohne Stetigkeitskorrektur) zum Konfidenzniveau 1 - a = 0,95 aus obigen Daten.
+```{r}
+z<-qnorm(.975)
+
+```
+**`r intervall `**
+
+(2) Welcher Stichprobenumfang würde zum Konfidenzniveau von 99 % eine Intervalllänge garantieren, die kleiner oder gleich der IntervalIlänge aus Teil (X) ist, wenn als sicher angenommen werden darf, dass für den geschätzten Anteilswert pe (0,6;0,8) gilt?
+```{r}
+
+```
+
+#Aufgabe 3.2.9
+Ein Dozent möchte die Qualität von zwei verschiedenen Lehrmethoden anhand der erreichten Punktezahl in einer Klausur untersuchen. Dabei wird die Lehrmethode A ausschließlich auf die Gruppe 1 und Lehrmethode B nur auf die von Gruppe 1 disjunkte Gruppe 2 angewandt. Die Zufallsvariablen "erreichte Punktezahl" werden mit X (Lehrmethode A) bzw. Y (Lehrmethode B) bezeichnet. Ferner sei Z=X-Y. mux bzw. muy  bzw. muz und sx bzw. sy bzw. sz seien die Erwartungswerte und Standardabweichungen von X bzw. Y bzw. Z. Je eine Stichprobe aus Gruppe 1 bzw. Gruppe 2 lieferte folgende Werte:
+
+
+```{r}
+Punkte<-c(10,20,30,40,50,60)
+Gruppe1<-c(13,4,7,15,6,5)
+Gruppe2<-c(11,6,6,11,8,8)
+
+```
+
+Gehen Sie davon aus1 dass die Punkte normalverteilt sind mit sigmax =sigmay = 17.
+a) Bestimmen Sie jeweils die Realisierung der wirksamsten aller erwartungstreuen Schätzfunktionen für mux bzw. muy.
+
+```{r}
+x_bar<-sum(Punkte*Gruppe1)/sum(Gruppe1);y_bar<-sum(Punkte*Gruppe2)/sum(Gruppe2)
+x_bar
+y_bar
+
+```
+
+b) Berechnen Sie sigmaz.
+```{r}
+s<-24
+n<-50
+```
+
+c) Geben Sie ein 95%-Konfidenzintervall für die Differenz mux - muy, der erwarteten Punktzahl unter Lehrmethode A und Lehrmethode B an.
+```{r}
+z<-qnorm(.975)
+z_bar<-x_bar-y_bar
+z_bar+c(-1,1)*(s/sqrt(n))*z
+
+
+```
+
+d) Ist zum Signifikanzniveau 0,05 die Gleichheit der Erwartungswerte 
+auszuschließen?Verwenden Sie zur Begründung das Konfidenzintervall aus c).
+
+```{r}
+
+```
+
+#Aufgabe 3.2.10 S.34
+Ein Wetterdienst hat seine Internetseiten neu gestaltet und insbesondere die 
+Wettervorhersage deutlich verbessert. Um den Erfolg des neuen Webauftritts zu messen, wurde 
+danach an 21 zufällig ausgewählten Tagen jeweils die Anzahl der Zugriffe auf die
+Internetseiten registriert. Aus diesen n = 21 Beobachtungswerten, die sich in guter 
+Näherung als normalverteilt erweisen, sind dann das arithmetische Mittel 
+x_bar = 5877 und die  empirische Varianz = 150462,3 berechnet worden.
+
+```{r}
+x_bar = 5877;n = 21 ;var=150462.3
+```
+
+a) Der Leiter des Wetterdienstes behauptet euphorisch, dass nunmehr im Mittel mindestens
+6000 Zugriffe pro Tag auf die Internetseiten erfolgen. Verträgt sich diese Behauptung
+mit den beobachteten Zahlen? Testen Sie mit alpha= 0,05.
+```{r}
+
+```
+
+b) Geben Sie ein 95%-Konfidenzintervall für die Standardabweichung an, mit der die Anzahl
+der Zugriffe pro Tag streut. Was konkret bedeutet das berechnete Intervall?
+
+
+```{r}
+
+```
+
+# Signifikanzinterval übung 1
+
+```{r}
+
+sample<-c(403,400,402,404,399,409,408,414,393,406,403,419,405,393,400,403,397,400,412,396)# in kg
+n<-length(sample)
+
+x1<-400
+alpha<-0.05
+```
+
+Wir ermitteln  erst den Mittelwert und die Standardabweichung der Probe
+
+```{r}
+x_bar<-mean(sample);x_bar
+s<-sd(sample);s
+
+```
+
+Testgröße und der Ablehnungsbereich lauten:
+H0: mu = 400 , H1: mu!=400
+
+```{r}
+mu0=400
+t<-(x_bar-mu0)*sqrt(n)/s;t
+t.test(sample)
+
+```
+
